@@ -15,6 +15,7 @@ export function ProofPanel({ proof, pool, onClaim }: { proof: ProofStatus; pool:
         <p className="text-sm font-semibold text-slate-500">Selected pool</p>
         <p className="mt-1 font-bold">{pool.name}</p>
         <p className="mt-1 text-sm text-slate-600">Release amount: {pool.awardXlm} XLM</p>
+        <p className="mt-1 text-sm text-slate-600">Network: Stellar testnet</p>
         <p className="mt-3 break-all font-mono text-xs text-slate-500">{proof.nullifier}</p>
       </div>
       <Button className="mt-5 w-full" onClick={onClaim}>

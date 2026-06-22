@@ -3,7 +3,7 @@ import { Panel, StatusChip } from './ui';
 
 export function UniversityPanel({ student }: { student: Student }) {
   return (
-    <Panel>
+    <Panel className="lg:col-span-2">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-sm font-semibold text-emerald-800">University Admin</p>
@@ -11,10 +11,17 @@ export function UniversityPanel({ student }: { student: Student }) {
         </div>
         <StatusChip tone="good">Verified</StatusChip>
       </div>
-      <div className="mt-5 rounded-lg border border-slate-200 p-4">
-        <p className="text-lg font-bold">{student.name}</p>
-        <p className="mt-1 text-sm text-slate-600">{student.department}</p>
-        <p className="mt-1 text-sm text-slate-600">{student.university}</p>
+      <div className="mt-5 flex flex-col gap-4 rounded-lg border border-slate-200 p-4 md:flex-row md:items-center md:justify-between">
+        <div>
+          <p className="text-2xl font-bold">{student.name}</p>
+          <p className="mt-2 text-sm text-slate-600">
+            Student ID: UNILAG-23-45678 <span className="px-2 text-slate-300">|</span> {student.department}
+          </p>
+          <p className="mt-1 text-sm text-slate-600">{student.university}</p>
+        </div>
+        <button className="rounded-md border border-emerald-200 px-4 py-2 text-sm font-semibold text-emerald-800">
+          View Passport
+        </button>
       </div>
       <dl className="mt-5 grid grid-cols-2 gap-3 text-sm">
         <div className="rounded-md bg-slate-50 p-3">
