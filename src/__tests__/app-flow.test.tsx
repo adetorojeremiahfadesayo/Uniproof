@@ -19,7 +19,7 @@ describe('UniProof app flow', () => {
 
     await user.click(screen.getByRole('button', { name: /release funds/i }));
 
-    expect(screen.getByText(/Claim already used/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Claim already used/i).length).toBeGreaterThan(0);
   });
 
   it('lets a donor fund the selected pool', async () => {

@@ -28,6 +28,7 @@ The MVP models the proof boundary with a deterministic proof-status layer:
 - Vite
 - Tailwind CSS
 - Vitest
+- Soroban smart contract
 - Stellar/Soroban-facing demo adapter
 
 ## Run Locally
@@ -44,6 +45,33 @@ npm test
 npm run build
 ```
 
+## Soroban Contract
+
+The local contract lives in `contracts/uniproof_pool/src/lib.rs`.
+
+It models the Level 2 blockchain flow:
+
+- create a university aid or scholarship pool
+- fund the pool
+- accept a proof verification result
+- store a nullifier for each claim
+- reject duplicate claims
+- reduce the pool balance when a verified claim is released
+
+The frontend is also wired to a local contract adapter in `src/lib/contractAdapter.ts`, so donor funding and student claim actions follow the same contract rules before deployment.
+
+Build the contract WASM with:
+
+```bash
+cargo build -p uniproof_pool --target wasm32v1-none --release
+```
+
+The expected artifact is:
+
+```text
+target/wasm32v1-none/release/uniproof_pool.wasm
+```
+
 ## Hackathon Notes
 
-The current implementation is a polished local MVP with simulated proof verification and a Stellar testnet-facing adapter. The next technical milestone is replacing the demo adapter with a Soroban contract that stores pool balances, checks proof verification output, records nullifiers, and releases funds.
+The current implementation is a polished local MVP with simulated proof verification, a Stellar testnet-facing adapter, a local Soroban contract, and a contract-connected frontend demo for pool balances, proof-gated claims, nullifiers, and one-time aid release.

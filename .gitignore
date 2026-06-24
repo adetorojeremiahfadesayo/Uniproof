@@ -1,6 +1,7 @@
 .playwright-cli/
 node_modules/
 dist/
+target/
 *.tsbuildinfo
 tailwind.config.js
 tailwind.config.d.ts

@@ -57,6 +57,7 @@ The first hackathon version should focus on one polished demo flow instead of tr
 - Student application or claim flow.
 - Proof generation or proof simulation layer.
 - Stellar/Soroban contract interface for verifying proof status and releasing funds.
+- Contract-connected frontend state showing pool balance, proof gate, nullifier status, and latest receipt.
 - Claim nullifier to prevent duplicate claims.
 
 ### Not Included In MVP
@@ -173,4 +174,3 @@ UniProof makes student support more private, more trustworthy, and easier to dis
 8. Connect frontend to the contract.
 9. Add demo data and polish the pitch flow.
 10. Prepare GitHub README and DoraHacks submission materials.
-
