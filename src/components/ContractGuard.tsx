@@ -1,7 +1,7 @@
 import { ShieldCheck } from 'lucide-react';
 import type { ContractState } from '../lib/contractAdapter';
 import type { AidPool, ProofStatus } from '../types';
-import { Panel, StatusChip } from './ui';
+import { StatusChip } from './ui';
 
 export function ContractGuard({
   contractState,
@@ -17,16 +17,12 @@ export function ContractGuard({
   const lastReceipt = contractState.lastReceipt;
 
   return (
-    <Panel>
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-sm font-semibold text-emerald-800">Contract Guard</p>
-          <h2 className="mt-2 text-xl font-bold">UniProofPool</h2>
-        </div>
-        <ShieldCheck className="size-7 text-emerald-700" />
-      </div>
-
-      <dl className="mt-5 grid gap-3 text-sm">
+    <div>
+      <p className="mb-4 flex items-center gap-2 text-sm text-slate-600">
+        <ShieldCheck className="size-4 text-emerald-600" />
+        The Stellar smart contract evaluates proof, balance, and nullifier state.
+      </p>
+      <dl className="grid gap-3 text-sm md:grid-cols-2">
         <GuardRow label="WASM build" value={contractState.contractName} status="ready" />
         <GuardRow label="Pool balance" value={`${contractPool?.balanceXlm ?? 0} XLM`} status="funded" />
         <GuardRow label="Proof gate" value={proof.verified && proof.eligible ? 'accepted' : 'rejected'} status={proof.verified && proof.eligible ? 'accepted' : 'rejected'} />
@@ -34,7 +30,7 @@ export function ContractGuard({
       </dl>
 
       {lastReceipt ? (
-        <div className="mt-5 rounded-lg border border-slate-200 bg-slate-50 p-4">
+        <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
           <div className="flex items-center justify-between gap-3">
             <p className="text-sm font-semibold text-slate-500">Last contract receipt</p>
             <StatusChip tone={lastReceipt.status === 'released' ? 'good' : 'warn'}>{lastReceipt.status}</StatusChip>
@@ -47,17 +43,17 @@ export function ContractGuard({
           <p className="mt-3 break-all font-mono text-xs text-slate-500">{lastReceipt.transaction.hash}</p>
         </div>
       ) : (
-        <p className="mt-5 rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-600">
+        <p className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-600">
           Waiting for a donor funding or student claim transaction.
         </p>
       )}
-    </Panel>
+    </div>
   );
 }
 
 function GuardRow({ label, value, status }: { label: string; value: string; status: string }) {
   return (
-    <div className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 p-3">
+    <div className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
       <dt className="font-semibold text-slate-600">{label}</dt>
       <dd className="flex min-w-0 items-center gap-2">
         <span className="truncate font-mono text-xs text-slate-500">{value}</span>

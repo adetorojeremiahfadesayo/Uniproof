@@ -58,6 +58,8 @@ The first hackathon version should focus on one polished demo flow instead of tr
 - Proof generation or proof simulation layer.
 - Stellar/Soroban contract interface for verifying proof status and releasing funds.
 - Contract-connected frontend state showing pool balance, proof gate, nullifier status, and latest receipt.
+- Multiple demo students and selectable aid pools to show accepted and rejected claim paths.
+- Contract event timeline and deployment readiness panel for judging and testnet handoff.
 - Claim nullifier to prevent duplicate claims.
 
 ### Not Included In MVP

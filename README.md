@@ -75,3 +75,13 @@ target/wasm32v1-none/release/uniproof_pool.wasm
 ## Hackathon Notes
 
 The current implementation is a polished local MVP with simulated proof verification, a Stellar testnet-facing adapter, a local Soroban contract, and a contract-connected frontend demo for pool balances, proof-gated claims, nullifiers, and one-time aid release.
+
+## Level 4 Demo Depth
+
+The current demo includes:
+
+- multiple student scenarios: verified, unverified, and verified-but-not-eligible
+- selectable scholarship and emergency aid pools
+- proof privacy detail showing hidden inputs, public signals, and result
+- contract event timeline for funding, releases, nullifier storage, and rejected claims
+- deployment readiness panel for the Level 5 Stellar testnet step

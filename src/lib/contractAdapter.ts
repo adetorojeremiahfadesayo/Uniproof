@@ -20,11 +20,20 @@ export type ContractReceipt = {
   transaction: StellarTransaction;
 };
 
+export type ContractEvent = {
+  id: string;
+  label: string;
+  poolId: string;
+  status: 'success' | 'rejected' | 'pending';
+  detail: string;
+};
+
 export type ContractState = {
   contractName: 'uniproof_pool';
   wasmPath: string;
   pools: Record<string, ContractPool>;
   usedNullifiers: string[];
+  events: ContractEvent[];
   lastReceipt?: ContractReceipt;
 };
 
@@ -45,7 +54,14 @@ export function createContractState(pools: AidPool[]): ContractState {
         }
       ])
     ),
-    usedNullifiers: []
+    usedNullifiers: [],
+    events: pools.map((pool) => ({
+      id: `pool_created_${pool.id}`,
+      label: 'Pool created',
+      poolId: pool.id,
+      status: 'success',
+      detail: `${pool.name} initialized with ${pool.balanceXlm} XLM`
+    }))
   };
 }
 
@@ -84,6 +100,10 @@ export function fundContractPool(contractState: ContractState, poolId: string, a
         ...contractState.pools,
         [poolId]: updatedPool
       },
+      events: [
+        createEvent('Pool funded', poolId, 'success', `${amountXlm} XLM added to ${pool.name}`),
+        ...contractState.events
+      ],
       lastReceipt: receipt
     },
     receipt
@@ -140,6 +160,11 @@ export function claimFromContract(
         [poolId]: updatedPool
       },
       usedNullifiers: [...contractState.usedNullifiers, proof.nullifier],
+      events: [
+        createEvent('Claim released', poolId, 'success', `${recipient} received ${pool.awardXlm} XLM`),
+        createEvent('Nullifier stored', poolId, 'success', proof.nullifier),
+        ...contractState.events
+      ],
       lastReceipt: receipt
     },
     receipt
@@ -168,8 +193,22 @@ function reject(
   return {
     state: {
       ...contractState,
+      events: [
+        createEvent('Claim rejected', poolId, 'rejected', reason ?? 'contract rejected the request'),
+        ...contractState.events
+      ],
       lastReceipt: receipt
     },
     receipt
+  };
+}
+
+function createEvent(label: string, poolId: string, status: ContractEvent['status'], detail: string): ContractEvent {
+  return {
+    id: `${label.toLowerCase().replaceAll(' ', '_')}_${poolId}_${Date.now().toString(16)}`,
+    label,
+    poolId,
+    status,
+    detail
   };
 }
