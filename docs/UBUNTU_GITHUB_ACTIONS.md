@@ -4,12 +4,12 @@ This is the fallback path for machines where Windows Installer or MSVC `link.exe
 
 GitHub Actions runs on Ubuntu, so it can build and test the UniProof contract without installing Visual Studio on your laptop.
 
-## Step 1: Push This Branch
+## Step 1: Use Main
 
-Push the current branch:
+The deploy workflow is now on `main`. If you need to update it again, push `main`:
 
 ```powershell
-git push origin feat/uniproof-mvp
+git push origin main
 ```
 
 ## Step 2: Run Ubuntu Contract CI
@@ -18,7 +18,7 @@ git push origin feat/uniproof-mvp
 2. Go to **Actions**.
 3. Select **Ubuntu Contract CI**.
 4. Click **Run workflow**.
-5. Choose branch `feat/uniproof-mvp`.
+5. Choose branch `main`.
 6. Click **Run workflow**.
 
 This workflow runs:
@@ -39,7 +39,7 @@ If it succeeds, download the `uniproof-pool-wasm` artifact from the workflow run
 1. Open **Actions**.
 2. Select **Deploy UniProof Contract to Stellar Testnet**.
 3. Click **Run workflow**.
-4. Choose branch `feat/uniproof-mvp`.
+4. Choose branch `main`.
 5. Click **Run workflow**.
 
 The deploy workflow:
