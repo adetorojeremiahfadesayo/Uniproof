@@ -47,7 +47,8 @@ The deploy workflow:
 - installs Stellar CLI on Ubuntu,
 - builds the WASM,
 - creates and funds a temporary Stellar testnet identity,
-- deploys `uniproof_pool.wasm` and submits the deploy transaction,
+- deploys `uniproof_pool.wasm`,
+- verifies the deployed contract interface is available,
 - initializes two demo pools,
 - writes the testnet contract ID to the workflow summary.
 

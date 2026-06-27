@@ -40,14 +40,37 @@ jobs:
       - name: Deploy contract
         id: deploy
         run: |
-          CONTRACT_ID=$(stellar contract deploy \
+          DEPLOY_OUTPUT=$(stellar contract deploy \
             --wasm target/wasm32v1-none/release/uniproof_pool.wasm \
             --source-account uniproof-ci \
             --network testnet \
-            --send=yes \
             --alias uniproof_pool)
+          echo "$DEPLOY_OUTPUT"
+          CONTRACT_ID=$(echo "$DEPLOY_OUTPUT" | grep -Eo 'C[A-Z0-9]{55}' | tail -n 1)
+          if [ -z "$CONTRACT_ID" ]; then
+            echo "Could not parse contract ID from deploy output."
+            exit 1
+          fi
           echo "contract_id=$CONTRACT_ID" >> "$GITHUB_OUTPUT"
           echo "UNIPROOF_TESTNET_CONTRACT_ID=$CONTRACT_ID" >> "$GITHUB_ENV"
+
+      - name: Verify deployed contract is available
+        run: |
+          for attempt in 1 2 3 4 5 6; do
+            if stellar contract info interface \
+              --contract-id "$UNIPROOF_TESTNET_CONTRACT_ID" \
+              --network testnet >/tmp/uniproof-interface.txt 2>/tmp/uniproof-interface.err; then
+              cat /tmp/uniproof-interface.txt
+              exit 0
+            fi
+
+            echo "Contract not available yet, retry $attempt/6"
+            cat /tmp/uniproof-interface.err || true
+            sleep 10
+          done
+
+          echo "Contract was not available after retries."
+          exit 1
 
       - name: Initialize demo pools
         run: |
