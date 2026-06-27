@@ -18,6 +18,15 @@ export const demoStudents: Student[] = [
     verified: false,
     needBand: 'high',
     credentialCommitment: 'pending'
+  },
+  {
+    id: 'student_zainab',
+    name: 'Zainab Bello',
+    university: 'Lagos State University',
+    department: 'Mass Communication',
+    verified: true,
+    needBand: 'low',
+    credentialCommitment: 'cred_3a18_zainab_lasu'
   }
 ];
 

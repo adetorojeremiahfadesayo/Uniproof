@@ -41,3 +41,15 @@ target/wasm32v1-none/release/uniproof_pool.wasm
 This version stores balances inside the contract model instead of moving real Stellar assets. The next deployment step is to wire the same claim rules to a Stellar token transfer on testnet.
 
 The frontend adapter mirrors the contract locally so judges can see the pool balance, proof gate, nullifier status, and latest receipt before the testnet deployment step.
+
+## Level 4 Frontend Model
+
+The frontend now exposes several contract paths:
+
+- verified and eligible student claim accepted
+- unverified student claim rejected
+- verified but not eligible student claim rejected
+- duplicate nullifier rejected after a successful claim
+- donor funding applied to the selected pool
+
+These paths are shown in the contract event timeline before the real Stellar testnet deployment.
