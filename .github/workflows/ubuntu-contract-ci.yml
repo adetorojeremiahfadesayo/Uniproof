@@ -1,0 +1,49 @@
+name: Ubuntu Contract CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - feat/uniproof-mvp
+  pull_request:
+
+jobs:
+  verify:
+    name: Build and test on Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Test frontend
+        run: npm test -- --run
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Set up Rust target
+        run: rustup target add wasm32v1-none
+
+      - name: Test contract
+        run: cargo test -p uniproof_pool
+
+      - name: Build contract WASM
+        run: cargo build -p uniproof_pool --target wasm32v1-none --release
+
+      - name: Upload UniProof WASM
+        uses: actions/upload-artifact@v4
+        with:
+          name: uniproof-pool-wasm
+          path: target/wasm32v1-none/release/uniproof_pool.wasm
+

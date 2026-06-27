@@ -1,0 +1,115 @@
+name: Deploy UniProof Contract to Stellar Testnet
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-testnet:
+    name: Build and deploy to testnet
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Stellar CLI
+        run: |
+          curl -fsSL https://github.com/stellar/stellar-cli/raw/main/install.sh | sh -s -- --install-deps
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Show Stellar CLI version
+        run: stellar --version
+
+      - name: Set up Rust target
+        run: rustup target add wasm32v1-none
+
+      - name: Test contract
+        run: cargo test -p uniproof_pool
+
+      - name: Build contract WASM
+        run: cargo build -p uniproof_pool --target wasm32v1-none --release
+
+      - name: Create and fund testnet deploy identity
+        run: |
+          stellar keys generate uniproof-ci --network testnet --fund
+          stellar keys address uniproof-ci
+
+      - name: Deploy contract
+        id: deploy
+        run: |
+          CONTRACT_ID=$(stellar contract deploy \
+            --wasm target/wasm32v1-none/release/uniproof_pool.wasm \
+            --source-account uniproof-ci \
+            --network testnet \
+            --alias uniproof_pool)
+          echo "contract_id=$CONTRACT_ID" >> "$GITHUB_OUTPUT"
+          echo "UNIPROOF_TESTNET_CONTRACT_ID=$CONTRACT_ID" >> "$GITHUB_ENV"
+
+      - name: Initialize demo pools
+        run: |
+          ADMIN_ADDRESS=$(stellar keys address uniproof-ci)
+
+          stellar contract invoke \
+            --id "$UNIPROOF_TESTNET_CONTRACT_ID" \
+            --source-account uniproof-ci \
+            --network testnet \
+            --send=yes \
+            -- \
+            create_pool \
+            --admin "$ADMIN_ADDRESS" \
+            --pool_id 1 \
+            --name "Emergency Aid Grant" \
+            --award_xlm 250
+
+          stellar contract invoke \
+            --id "$UNIPROOF_TESTNET_CONTRACT_ID" \
+            --source-account uniproof-ci \
+            --network testnet \
+            --send=yes \
+            -- \
+            fund_pool \
+            --admin "$ADMIN_ADDRESS" \
+            --pool_id 1 \
+            --amount_xlm 2500
+
+          stellar contract invoke \
+            --id "$UNIPROOF_TESTNET_CONTRACT_ID" \
+            --source-account uniproof-ci \
+            --network testnet \
+            --send=yes \
+            -- \
+            create_pool \
+            --admin "$ADMIN_ADDRESS" \
+            --pool_id 2 \
+            --name "Computer Science Scholarship" \
+            --award_xlm 500
+
+          stellar contract invoke \
+            --id "$UNIPROOF_TESTNET_CONTRACT_ID" \
+            --source-account uniproof-ci \
+            --network testnet \
+            --send=yes \
+            -- \
+            fund_pool \
+            --admin "$ADMIN_ADDRESS" \
+            --pool_id 2 \
+            --amount_xlm 5000
+
+      - name: Deployment summary
+        run: |
+          echo "## UniProof Testnet Deployment" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Contract ID:" >> "$GITHUB_STEP_SUMMARY"
+          echo "\`$UNIPROOF_TESTNET_CONTRACT_ID\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Network: Stellar testnet" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload UniProof WASM
+        uses: actions/upload-artifact@v4
+        with:
+          name: uniproof-pool-wasm
+          path: target/wasm32v1-none/release/uniproof_pool.wasm
+
