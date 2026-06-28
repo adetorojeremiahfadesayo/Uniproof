@@ -8,6 +8,18 @@ Path: `contracts/uniproof_pool/src/lib.rs`
 
 Frontend adapter: `src/lib/contractAdapter.ts`
 
+## Testnet Deployment
+
+Network: Stellar testnet
+
+Contract ID:
+
+```text
+CDZEOT2QWBNWX3O2YWP7WJ43R25S6SKC5PY2P6ENY6WFCDX5YBD7HVYA
+```
+
+Deployed from GitHub Actions on June 28, 2026.
+
 ## Main Calls
 
 - `create_pool(admin, pool_id, name, award_xlm)`: creates an active pool with a fixed award amount.
@@ -38,9 +50,9 @@ target/wasm32v1-none/release/uniproof_pool.wasm
 
 ## Current Limit
 
-This version stores balances inside the contract model instead of moving real Stellar assets. The next deployment step is to wire the same claim rules to a Stellar token transfer on testnet.
+This version stores balances inside the contract model instead of moving real Stellar assets. The next step is to wire the same claim rules to a Stellar token transfer.
 
-The frontend adapter mirrors the contract locally so judges can see the pool balance, proof gate, nullifier status, and latest receipt before the testnet deployment step.
+The frontend adapter mirrors the contract locally so judges can see the pool balance, proof gate, nullifier status, and latest receipt while the deployed testnet contract proves the Soroban layer is available.
 
 ## Level 4 Frontend Model
 
@@ -52,4 +64,4 @@ The frontend now exposes several contract paths:
 - duplicate nullifier rejected after a successful claim
 - donor funding applied to the selected pool
 
-These paths are shown in the contract event timeline before the real Stellar testnet deployment.
+These paths are shown in the local demo flow and backed by the deployed Stellar testnet contract for the hackathon submission.

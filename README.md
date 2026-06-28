@@ -72,6 +72,16 @@ The expected artifact is:
 target/wasm32v1-none/release/uniproof_pool.wasm
 ```
 
+## Testnet Deployment
+
+UniProof has a deployed Stellar testnet contract for the hackathon demo:
+
+```text
+CDZEOT2QWBNWX3O2YWP7WJ43R25S6SKC5PY2P6ENY6WFCDX5YBD7HVYA
+```
+
+Network: Stellar testnet
+
 ## Hackathon Notes
 
 The current implementation is a polished local MVP with simulated proof verification, a Stellar testnet-facing adapter, a local Soroban contract, and a contract-connected frontend demo for pool balances, proof-gated claims, nullifiers, and one-time aid release.
