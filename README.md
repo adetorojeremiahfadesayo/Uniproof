@@ -82,6 +82,8 @@ CDZEOT2QWBNWX3O2YWP7WJ43R25S6SKC5PY2P6ENY6WFCDX5YBD7HVYA
 
 Network: Stellar testnet
 
+The app includes a **Live Testnet Contract** panel that scans Stellar testnet RPC from the browser, checks the deployed contract instance ledger entry, and links judges to the contract explorer.
+
 ## Hackathon Notes
 
 The current implementation is a polished local MVP with simulated proof verification, a Stellar testnet-facing adapter, a local Soroban contract, and a contract-connected frontend demo for pool balances, proof-gated claims, nullifiers, and one-time aid release.

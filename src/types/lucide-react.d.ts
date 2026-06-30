@@ -13,11 +13,15 @@ declare module 'lucide-react' {
   export const ChevronRight: LucideIcon;
   export const CircleDollarSign: LucideIcon;
   export const DollarSign: LucideIcon;
+  export const ExternalLink: LucideIcon;
   export const FileCheck: LucideIcon;
   export const GraduationCap: LucideIcon;
   export const LayoutDashboard: LucideIcon;
+  export const RefreshCw: LucideIcon;
+  export const Satellite: LucideIcon;
   export const Shield: LucideIcon;
   export const ShieldCheck: LucideIcon;
+  export const TriangleAlert: LucideIcon;
   export const Wallet: LucideIcon;
   export const WalletCards: LucideIcon;
   export const X: LucideIcon;

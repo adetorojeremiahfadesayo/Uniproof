@@ -5,6 +5,7 @@ import { AidPools } from './components/AidPools';
 import { AppShell } from './components/AppShell';
 import { ClaimResultDialog, type ClaimResult } from './components/ClaimResultDialog';
 import { ContractGuard } from './components/ContractGuard';
+import { LiveTestnetContract } from './components/LiveTestnetContract';
 import { ProofPrivacyPanel } from './components/ProofPrivacyPanel';
 import { StepCard, type StepState } from './components/StepCard';
 import { UniversityPanel } from './components/UniversityPanel';
@@ -119,6 +120,8 @@ export default function App() {
 
   return (
     <AppShell currentStep={currentStep} message={message}>
+      <LiveTestnetContract />
+
       <StepCard
         stepNumber={1}
         title="Select Student"

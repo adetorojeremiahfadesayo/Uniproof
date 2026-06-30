@@ -20,6 +20,8 @@ CDZEOT2QWBNWX3O2YWP7WJ43R25S6SKC5PY2P6ENY6WFCDX5YBD7HVYA
 
 Deployed from GitHub Actions on June 28, 2026.
 
+The frontend includes a live scanner panel that calls Stellar testnet RPC from the browser. It checks the contract instance ledger key for this contract ID, displays the latest ledger/protocol data, and links to a public contract explorer.
+
 ## Main Calls
 
 - `create_pool(admin, pool_id, name, award_xlm)`: creates an active pool with a fixed award amount.
