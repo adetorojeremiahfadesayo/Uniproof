@@ -75,14 +75,14 @@ These can be described as future work in the pitch.
 
 ## Core Demo Flow
 
-1. A university admin verifies a student named Ada.
-2. Ada receives a UniProof Passport.
+1. A university admin verifies a student named Maya Chen.
+2. Maya receives a UniProof Passport.
 3. A donor funds an emergency aid pool on Stellar.
-4. Ada opens the aid pool and clicks claim.
-5. UniProof creates a proof that Ada is verified, eligible, and has not claimed before.
+4. Maya opens the aid pool and clicks claim.
+5. UniProof creates a proof that Maya is verified, eligible, and has not claimed before.
 6. The Stellar contract accepts the proof result.
-7. Aid is released to Ada.
-8. Ada's identity and sensitive details remain hidden from public view.
+7. Aid is released to Maya.
+8. Maya's identity and sensitive details remain hidden from public view.
 
 ## What The ZK Proof Should Prove
 

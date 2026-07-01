@@ -4,10 +4,10 @@ UniProof is a university-first privacy passport platform for student verificatio
 
 ## Demo Flow
 
-1. A university verifies Ada Okafor.
-2. Ada receives a UniProof Passport.
+1. A university verifies Maya Chen.
+2. Maya receives a UniProof Passport.
 3. A donor funds the Emergency Aid Grant pool.
-4. Ada proves she is verified, eligible, and has not claimed before.
+4. Maya proves she is verified, eligible, and has not claimed before.
 5. UniProof releases funds through the Stellar testnet demo adapter.
 
 ## Why ZK

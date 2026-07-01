@@ -18,9 +18,9 @@ describe('contract adapter', () => {
     const claim = claimFromContract(contractState, pool.id, proof, demoStudents[0].id);
 
     expect(claim.receipt.status).toBe('released');
-    expect(claim.receipt.nullifier).toBe('claim_ada_emergency');
+    expect(claim.receipt.nullifier).toBe('claim_maya_emergency');
     expect(claim.state.pools[pool.id].balanceXlm).toBe(3250);
-    expect(claim.state.usedNullifiers).toContain('claim_ada_emergency');
+    expect(claim.state.usedNullifiers).toContain('claim_maya_emergency');
   });
 
   it('rejects a duplicate claim nullifier', () => {

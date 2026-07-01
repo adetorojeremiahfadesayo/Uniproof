@@ -5,6 +5,7 @@ import { AidPools } from './components/AidPools';
 import { AppShell } from './components/AppShell';
 import { ClaimResultDialog, type ClaimResult } from './components/ClaimResultDialog';
 import { ContractGuard } from './components/ContractGuard';
+import { DemoGuideDialog } from './components/DemoGuideDialog';
 import { LiveTestnetContract } from './components/LiveTestnetContract';
 import { ProofPrivacyPanel } from './components/ProofPrivacyPanel';
 import { StepCard, type StepState } from './components/StepCard';
@@ -21,6 +22,7 @@ export default function App() {
   const [currentStep, setCurrentStep] = useState(1);
   const [message, setMessage] = useState('Select a student and pool to begin verification');
   const [claimResult, setClaimResult] = useState<ClaimResult | null>(null);
+  const [guideOpen, setGuideOpen] = useState(true);
 
   const pools = useMemo(() => syncPoolsFromContract(demoAidPools, contractState), [contractState]);
   const selectedStudent = demoStudents.find((student) => student.id === selectedStudentId) ?? null;
@@ -112,6 +114,17 @@ export default function App() {
     });
   }
 
+  function handleResetToStudents() {
+    setSelectedStudentId(null);
+    setSelectedPoolId(null);
+    setCurrentStep(1);
+    setMessage('Select a student and pool to begin verification');
+    setClaimResult(null);
+    if (!navigator.userAgent.toLowerCase().includes('jsdom')) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
   function getStepState(step: number): StepState {
     if (currentStep === step) return 'active';
     if (currentStep > step) return 'completed';
@@ -119,7 +132,8 @@ export default function App() {
   }
 
   return (
-    <AppShell currentStep={currentStep} message={message}>
+    <AppShell currentStep={currentStep} message={message} onOpenGuide={() => setGuideOpen(true)}>
+      <DemoGuideDialog open={guideOpen} onClose={() => setGuideOpen(false)} />
       <LiveTestnetContract />
 
       <StepCard
@@ -183,7 +197,7 @@ export default function App() {
           <ActionPanel pool={selectedPool} proof={proof} onClaim={handleClaim} onFund={handleFund} />
         </StepCard>
       ) : null}
-      <ClaimResultDialog result={claimResult} onClose={() => setClaimResult(null)} />
+      <ClaimResultDialog result={claimResult} onClose={() => setClaimResult(null)} onReset={handleResetToStudents} />
     </AppShell>
   );
 }

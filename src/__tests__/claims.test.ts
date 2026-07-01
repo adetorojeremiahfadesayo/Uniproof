@@ -11,7 +11,7 @@ describe('claim state', () => {
     const result = applyClaim(pool, proof);
 
     expect(result.pool.balanceXlm).toBe(2250);
-    expect(result.usedNullifier).toBe('claim_ada_emergency');
+    expect(result.usedNullifier).toBe('claim_maya_emergency');
     expect(result.status).toBe('released');
   });
 

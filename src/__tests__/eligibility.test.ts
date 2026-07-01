@@ -13,7 +13,7 @@ describe('createProofStatus', () => {
   });
 
   it('blocks a student who has already claimed the same pool', () => {
-    const proof = createProofStatus(demoStudents[0], demoAidPools[0], ['claim_ada_emergency']);
+    const proof = createProofStatus(demoStudents[0], demoAidPools[0], ['claim_maya_emergency']);
 
     expect(proof.claimNotUsed).toBe(false);
     expect(proof.canReleaseFunds).toBe(false);

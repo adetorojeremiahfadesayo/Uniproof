@@ -34,6 +34,21 @@ a:focus-visible {
   animation: claim-pop-in 240ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.success-glow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(16, 185, 129, 0.34), transparent 28%),
+    radial-gradient(circle at 42% 50%, rgba(245, 158, 11, 0.2), transparent 22%),
+    radial-gradient(circle at 60% 50%, rgba(56, 189, 248, 0.18), transparent 24%);
+  animation: success-glow-pulse 1300ms ease-out forwards;
+}
+
+.success-icon-bounce {
+  animation: success-icon-pop 720ms cubic-bezier(0.2, 1.4, 0.32, 1);
+}
+
 .confetti-piece {
   position: absolute;
   left: 50%;
@@ -75,6 +90,20 @@ a:focus-visible {
 .confetti-piece-16 { --tx: 36px; --ty: 48px; --rot: 180deg; }
 .confetti-piece-17 { --tx: 90px; --ty: 28px; --rot: 304deg; }
 .confetti-piece-18 { --tx: 142px; --ty: 44px; --rot: 212deg; }
+.confetti-piece-19 { --tx: -174px; --ty: -12px; --rot: 282deg; }
+.confetti-piece-20 { --tx: -156px; --ty: 78px; --rot: 138deg; }
+.confetti-piece-21 { --tx: -112px; --ty: 100px; --rot: 326deg; }
+.confetti-piece-22 { --tx: -58px; --ty: 92px; --rot: 198deg; }
+.confetti-piece-23 { --tx: 2px; --ty: 84px; --rot: 288deg; }
+.confetti-piece-24 { --tx: 58px; --ty: 98px; --rot: 150deg; }
+.confetti-piece-25 { --tx: 114px; --ty: 88px; --rot: 238deg; }
+.confetti-piece-26 { --tx: 174px; --ty: 70px; --rot: 118deg; }
+.confetti-piece-27 { --tx: -188px; --ty: -56px; --rot: 340deg; }
+.confetti-piece-28 { --tx: -144px; --ty: -154px; --rot: 96deg; }
+.confetti-piece-29 { --tx: -4px; --ty: -156px; --rot: 226deg; }
+.confetti-piece-30 { --tx: 136px; --ty: -154px; --rot: 312deg; }
+.confetti-piece-31 { --tx: 190px; --ty: -34px; --rot: 176deg; }
+.confetti-piece-32 { --tx: 188px; --ty: 18px; --rot: 264deg; }
 
 @keyframes claim-pop-in {
   from {
@@ -98,6 +127,32 @@ a:focus-visible {
   100% {
     opacity: 0;
     transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1) rotate(var(--rot));
+  }
+}
+
+@keyframes success-glow-pulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  28% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.82;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes success-icon-pop {
+  0% {
+    transform: scale(0.72);
+  }
+  45% {
+    transform: scale(1.16);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 

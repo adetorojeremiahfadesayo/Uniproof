@@ -9,15 +9,24 @@ export type ClaimResult = {
   transactionHash?: string;
 };
 
-const confettiPieces = Array.from({ length: 18 }, (_, index) => index);
+const confettiPieces = Array.from({ length: 32 }, (_, index) => index);
 
-export function ClaimResultDialog({ result, onClose }: { result: ClaimResult | null; onClose: () => void }) {
+export function ClaimResultDialog({
+  result,
+  onClose,
+  onReset
+}: {
+  result: ClaimResult | null;
+  onClose: () => void;
+  onReset: () => void;
+}) {
   if (!result) return null;
 
   const isSuccess = result.status === 'success';
 
   return (
     <div className="fixed inset-0 z-[80] grid place-items-center bg-slate-950/40 px-4 py-6 backdrop-blur-sm" role="presentation">
+      {isSuccess ? <div aria-hidden="true" className="success-glow" /> : null}
       <section
         aria-labelledby="claim-result-title"
         aria-modal="true"
@@ -45,7 +54,7 @@ export function ClaimResultDialog({ result, onClose }: { result: ClaimResult | n
 
         <div
           className={`mx-auto grid size-14 place-items-center rounded-full ${
-            isSuccess ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'
+            isSuccess ? 'success-icon-bounce bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'
           }`}
         >
           {isSuccess ? <CheckCircle className="size-7" /> : <XCircle className="size-7" />}
@@ -67,9 +76,16 @@ export function ClaimResultDialog({ result, onClose }: { result: ClaimResult | n
           {result.transactionHash ? <p className="mt-3 break-all font-mono text-xs text-slate-500">{result.transactionHash}</p> : null}
         </div>
 
-        <Button className="mt-5 w-full" onClick={onClose}>
-          Continue
-        </Button>
+        <div className="mt-5 grid gap-2 sm:grid-cols-2">
+          <button
+            className="inline-flex min-h-11 items-center justify-center rounded-lg bg-white px-4 py-2 text-sm font-semibold text-emerald-900 ring-1 ring-emerald-800 transition hover:bg-emerald-50"
+            onClick={onReset}
+            type="button"
+          >
+            Try another student
+          </button>
+          <Button onClick={onClose}>Continue</Button>
+        </div>
       </section>
     </div>
   );

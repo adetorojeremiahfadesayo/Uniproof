@@ -2,31 +2,31 @@ import type { AidPool, Student } from '../types';
 
 export const demoStudents: Student[] = [
   {
-    id: 'student_ada',
-    name: 'Ada Okafor',
-    university: 'Lagos State University',
+    id: 'student_maya',
+    name: 'Maya Chen',
+    university: 'Global Tech University',
     department: 'Computer Science',
     verified: true,
     needBand: 'high',
-    credentialCommitment: 'cred_7f91_ada_lasu'
+    credentialCommitment: 'cred_7f91_maya_gtu'
   },
   {
-    id: 'student_timi',
-    name: 'Timi Adeyemi',
-    university: 'Lagos State University',
+    id: 'student_leo',
+    name: 'Leo Martin',
+    university: 'Global Tech University',
     department: 'Computer Science',
     verified: false,
     needBand: 'high',
     credentialCommitment: 'pending'
   },
   {
-    id: 'student_zainab',
-    name: 'Zainab Bello',
-    university: 'Lagos State University',
-    department: 'Mass Communication',
+    id: 'student_sofia',
+    name: 'Sofia Patel',
+    university: 'Global Arts University',
+    department: 'Public Policy',
     verified: true,
     needBand: 'low',
-    credentialCommitment: 'cred_3a18_zainab_lasu'
+    credentialCommitment: 'cred_3a18_sofia_gau'
   }
 ];
 
