@@ -23,7 +23,7 @@ The platform combines:
 - Private eligibility checks for scholarships and aid
 - Donor-funded Stellar aid pools
 - One-time claim enforcement through nullifiers
-- A browser-visible Stellar testnet contract scanner for judges
+- A browser-visible Stellar testnet contract scanner for users and reviewers
 
 ## Problem
 
@@ -45,7 +45,7 @@ Users can see the public result - approved, rejected, or already claimed - witho
 ## Users Demo Walkthrough
 
 1. Open UniProof and confirm the **Live Testnet Contract** panel.
-2. Use the guided tour to follow the judge path.
+2. Use the guided tour to follow the demo path.
 3. Select **Maya Chen** for the successful claim flow.
 4. Select **Emergency Aid Grant**.
 5. Review the private proof and contract decision.
@@ -54,7 +54,7 @@ Users can see the public result - approved, rejected, or already claimed - witho
 
 ## Screenshots
 
-### Guided Judge Tour
+### Guided Demo Tour
 
 ![Guided UniProof judge tour highlighting the live Stellar testnet contract panel](./docs/images/uniproof-guided-tour.png)
 
@@ -86,15 +86,15 @@ The frontend includes a live browser scanner that connects to Stellar testnet RP
 
 ```mermaid
 flowchart LR
-  University[University verifier] --> Passport[UniProof Passport]
-  Student[Student] --> Proof[Private proof result]
-  Donor[Donor] --> Pool[Stellar aid pool]
-  Passport --> Proof
-  Pool --> Contract[UniProofPool contract model]
-  Proof --> Contract
-  Contract --> Decision{Contract decision}
-  Decision -->|approved| Release[Release aid]
-  Decision -->|rejected| Reason[Show rejection reason]
+  university["University verifier"] --> passport["UniProof Passport"]
+  student["Student"] --> proof["Private proof result"]
+  donor["Donor"] --> pool["Stellar aid pool"]
+  passport --> proof
+  pool --> contract["UniProofPool contract model"]
+  proof --> contract
+  contract --> decision{"Contract decision"}
+  decision -- Approved --> release["Release aid"]
+  decision -- Rejected --> reason["Show rejection reason"]
 ```
 
 ## Tech Stack
@@ -174,3 +174,6 @@ Next steps after the hackathon:
 - Expand donor dashboards and multi-pool reporting
 - Prepare mainnet deployment once the proof system and issuer controls are production-ready
 
+## License
+
+UniProof is released under the [MIT License](./LICENSE).
