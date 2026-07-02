@@ -40,9 +40,9 @@ The MVP models the zero-knowledge boundary with a deterministic proof-status lay
 - The claim nullifier has not been used before.
 - Funds can release once, and only once.
 
-Judges can see the public result - approved, rejected, or already claimed - without needing the student's full identity file.
+Users can see the public result - approved, rejected, or already claimed - without needing the student's full identity file.
 
-## Judge Demo Walkthrough
+## Users Demo Walkthrough
 
 1. Open UniProof and confirm the **Live Testnet Contract** panel.
 2. Use the guided tour to follow the judge path.
@@ -174,6 +174,3 @@ Next steps after the hackathon:
 - Expand donor dashboards and multi-pool reporting
 - Prepare mainnet deployment once the proof system and issuer controls are production-ready
 
-## License
-
-No open-source license has been declared yet. This repository is provided for hackathon judging and project review.
