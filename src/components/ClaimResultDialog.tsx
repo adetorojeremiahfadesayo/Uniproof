@@ -79,6 +79,7 @@ export function ClaimResultDialog({
         <div className="mt-5 grid gap-2 sm:grid-cols-2">
           <button
             className="inline-flex min-h-11 items-center justify-center rounded-lg bg-white px-4 py-2 text-sm font-semibold text-emerald-900 ring-1 ring-emerald-800 transition hover:bg-emerald-50"
+            data-tour-id="try-another-student"
             onClick={onReset}
             type="button"
           >

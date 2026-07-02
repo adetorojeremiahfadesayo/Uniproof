@@ -9,14 +9,32 @@ describe('UniProof app flow', () => {
 
     expect(screen.queryByText(/Contract Events/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Deployment Readiness/i)).not.toBeInTheDocument();
-    expect(screen.getByRole('dialog', { name: /Judge demo guide/i })).toBeInTheDocument();
+    expect(screen.getByRole('dialog', { name: /Guided demo tour/i })).toBeInTheDocument();
+    expect(screen.getByText(/Step 1 of 5/i)).toBeInTheDocument();
+    expect(screen.getByText(/Watch this panel verify the deployed Stellar testnet contract/i)).toBeInTheDocument();
+  });
+
+  it('walks judges through the guided spotlight tour', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole('button', { name: /Next/i }));
+    expect(screen.getByText(/Step 2 of 5/i)).toBeInTheDocument();
+    expect(screen.getByText(/Click Maya Chen/i)).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: /Skip tour/i }));
+    expect(screen.queryByRole('dialog', { name: /Guided demo tour/i })).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: /Demo Guide/i }));
+    expect(screen.getByRole('dialog', { name: /Guided demo tour/i })).toBeInTheDocument();
+    expect(screen.getByText(/Step 1 of 5/i)).toBeInTheDocument();
   });
 
   it('shows Maya as verified, releases emergency aid once, and resets to student selection', async () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click(screen.getByRole('button', { name: /Start Demo/i }));
+    await user.click(screen.getByRole('button', { name: /Skip tour/i }));
 
     expect(screen.getAllByText('Maya Chen').length).toBeGreaterThan(0);
 
@@ -40,7 +58,7 @@ describe('UniProof app flow', () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click(screen.getByRole('button', { name: /Start Demo/i }));
+    await user.click(screen.getByRole('button', { name: /Skip tour/i }));
     await user.click(screen.getByRole('button', { name: /Maya Chen/i }));
     await user.click(await screen.findByRole('button', { name: /Emergency Aid Grant/i }, { timeout: 5000 }));
     await user.click(await screen.findByRole('button', { name: /add 1000 xlm/i }, { timeout: 5000 }));
@@ -53,7 +71,7 @@ describe('UniProof app flow', () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click(screen.getByRole('button', { name: /Start Demo/i }));
+    await user.click(screen.getByRole('button', { name: /Skip tour/i }));
     await user.click(screen.getByRole('button', { name: /Leo Martin/i }));
     await user.click(await screen.findByRole('button', { name: /Emergency Aid Grant/i }, { timeout: 5000 }));
     await user.click(await screen.findByRole('button', { name: /release funds/i }, { timeout: 5000 }));
@@ -68,7 +86,7 @@ describe('UniProof app flow', () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click(screen.getByRole('button', { name: /Start Demo/i }));
+    await user.click(screen.getByRole('button', { name: /Skip tour/i }));
     await user.click(screen.getByRole('button', { name: /Maya Chen/i }));
     await user.click(await screen.findByRole('button', { name: /Computer Science Scholarship/i }, { timeout: 5000 }));
     expect(screen.getAllByText(/Computer Science Scholarship selected/i).length).toBeGreaterThan(0);

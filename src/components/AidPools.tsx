@@ -25,6 +25,7 @@ export function AidPools({
                 ? 'border-emerald-400 bg-emerald-50 shadow-[0_0_0_2px_rgba(16,185,129,0.12)]'
                 : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm'
             }`}
+            data-tour-id={pool.id === 'pool_emergency' ? 'pool-emergency' : undefined}
             key={pool.id}
             onClick={() => onSelectPool(pool.id)}
             type="button"

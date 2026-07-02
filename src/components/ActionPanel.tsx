@@ -36,7 +36,7 @@ export function ActionPanel({
                 ? 'Contract rejected the proof. Funds cannot be released.'
                 : 'This passport has already claimed from this pool.'}
           </p>
-          <Button className="w-full" onClick={onClaim}>
+          <Button className="w-full" data-tour-id="release-funds" onClick={onClaim}>
             Release funds
           </Button>
         </div>

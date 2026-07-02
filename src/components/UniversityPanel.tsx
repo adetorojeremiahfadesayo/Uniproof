@@ -24,6 +24,7 @@ export function UniversityPanel({
                   ? 'border-emerald-400 bg-emerald-50 shadow-[0_0_0_2px_rgba(16,185,129,0.12)]'
                   : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-md'
               }`}
+              data-tour-id={student.id === 'student_maya' ? 'student-maya' : undefined}
               key={student.id}
               onClick={() => onSelectStudent(student.id)}
               type="button"
