@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
-import { BadgeCheck, CircleDollarSign, GraduationCap, ShieldCheck, WalletCards } from 'lucide-react';
+import { Activity, BadgeCheck, CircleDollarSign, GraduationCap, ShieldCheck, WalletCards } from 'lucide-react';
 import { ActionPanel } from './components/ActionPanel';
 import { AidPools } from './components/AidPools';
 import { AppShell } from './components/AppShell';
 import { ClaimResultDialog, type ClaimResult } from './components/ClaimResultDialog';
 import { ContractGuard } from './components/ContractGuard';
 import { DemoGuideDialog } from './components/DemoGuideDialog';
+import { FraudAgentPanel, type FraudAgentStatus } from './components/FraudAgentPanel';
 import { LiveTestnetContract } from './components/LiveTestnetContract';
 import { ProofPrivacyPanel } from './components/ProofPrivacyPanel';
 import { StepCard, type StepState } from './components/StepCard';
@@ -13,7 +14,8 @@ import { UniversityPanel } from './components/UniversityPanel';
 import { demoAidPools, demoStudents } from './data/demoData';
 import { claimFromContract, createContractState, fundContractPool, syncPoolsFromContract } from './lib/contractAdapter';
 import { createProofStatus } from './lib/eligibility';
-import type { AidPool, ProofStatus, Student } from './types';
+import { createFraudReviewContext, requestFraudReview } from './lib/fraudAgent';
+import type { AidPool, FraudReview, ProofStatus, Student } from './types';
 
 export default function App() {
   const [contractState, setContractState] = useState(() => createContractState(demoAidPools));
@@ -23,6 +25,8 @@ export default function App() {
   const [message, setMessage] = useState('Select a student and pool to begin verification');
   const [claimResult, setClaimResult] = useState<ClaimResult | null>(null);
   const [guideOpen, setGuideOpen] = useState(true);
+  const [fraudReview, setFraudReview] = useState<FraudReview | null>(null);
+  const [fraudStatus, setFraudStatus] = useState<FraudAgentStatus>('idle');
 
   const pools = useMemo(() => syncPoolsFromContract(demoAidPools, contractState), [contractState]);
   const selectedStudent = demoStudents.find((student) => student.id === selectedStudentId) ?? null;
@@ -30,6 +34,10 @@ export default function App() {
   const proof = useMemo(
     () => (selectedStudent && selectedPool ? createProofStatus(selectedStudent, selectedPool, contractState.usedNullifiers) : null),
     [selectedStudent, selectedPool, contractState.usedNullifiers]
+  );
+  const fraudContext = useMemo(
+    () => (selectedStudent && selectedPool && proof ? createFraudReviewContext(selectedStudent, selectedPool, proof, contractState) : null),
+    [selectedStudent, selectedPool, proof, contractState]
   );
 
   function handleSelectStudent(studentId: string) {
@@ -71,11 +79,40 @@ export default function App() {
   }, [proof, currentStep]);
 
   useEffect(() => {
-    if (proof && currentStep === 4) {
-      const timer = window.setTimeout(() => setCurrentStep(5), 800);
+    if (fraudContext && currentStep === 4 && fraudStatus === 'ready') {
+      const timer = window.setTimeout(() => setCurrentStep(5), 1000);
+      return () => window.clearTimeout(timer);
+    }
+  }, [fraudContext, currentStep, fraudStatus]);
+
+  useEffect(() => {
+    if (proof && currentStep === 5) {
+      const timer = window.setTimeout(() => setCurrentStep(6), 800);
       return () => window.clearTimeout(timer);
     }
   }, [proof, currentStep]);
+
+  useEffect(() => {
+    if (!fraudContext) {
+      setFraudStatus('idle');
+      setFraudReview(null);
+      return;
+    }
+
+    let cancelled = false;
+    setFraudStatus('loading');
+    setFraudReview(null);
+
+    requestFraudReview(fraudContext).then((review) => {
+      if (cancelled) return;
+      setFraudReview(review);
+      setFraudStatus('ready');
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [fraudContext]);
 
   function handleFund() {
     if (!selectedPool) return;
@@ -173,12 +210,25 @@ export default function App() {
         </StepCard>
       ) : null}
 
-      {currentStep >= 4 && selectedPool && proof ? (
+      {currentStep >= 4 && selectedStudent && selectedPool && proof ? (
         <StepCard
           stepNumber={4}
+          title="Qwen Fraud Review Agent"
+          description="AI fraud signal before contract release"
+          state={getStepState(4)}
+          icon={<Activity className="size-5" />}
+          summary={fraudReview ? <FraudSummary review={fraudReview} /> : <span className="text-sm text-slate-500">Reviewing claim risk</span>}
+        >
+          <FraudAgentPanel review={fraudReview} status={fraudStatus} />
+        </StepCard>
+      ) : null}
+
+      {currentStep >= 5 && selectedPool && proof ? (
+        <StepCard
+          stepNumber={5}
           title="Contract Decision"
           description="Stellar smart contract evaluation"
-          state={getStepState(4)}
+          state={getStepState(5)}
           icon={<ShieldCheck className="size-5" />}
           summary={<ContractSummary proof={proof} pool={selectedPool} />}
         >
@@ -186,12 +236,12 @@ export default function App() {
         </StepCard>
       ) : null}
 
-      {currentStep >= 5 && selectedPool && proof ? (
+      {currentStep >= 6 && selectedPool && proof ? (
         <StepCard
-          stepNumber={5}
+          stepNumber={6}
           title="Take Action"
           description="Complete claim or add funds"
-          state={getStepState(5)}
+          state={getStepState(6)}
           icon={<CircleDollarSign className="size-5" />}
         >
           <ActionPanel pool={selectedPool} proof={proof} onClaim={handleClaim} onFund={handleFund} />
@@ -260,6 +310,24 @@ function ProofSummary({ proof }: { proof: ProofStatus }) {
     <div className="text-sm">
       <span className={proof.canReleaseFunds ? 'font-medium text-emerald-700' : 'font-medium text-red-700'}>
         Proof {proof.canReleaseFunds ? 'verified' : 'rejected'} - {passed}/3 checks passed
+      </span>
+    </div>
+  );
+}
+
+function FraudSummary({ review }: { review: FraudReview }) {
+  return (
+    <div className="text-sm">
+      <span
+        className={
+          review.riskLevel === 'low'
+            ? 'font-medium text-emerald-700'
+            : review.riskLevel === 'high'
+              ? 'font-medium text-red-700'
+              : 'font-medium text-amber-700'
+        }
+      >
+        {review.summary}
       </span>
     </div>
   );

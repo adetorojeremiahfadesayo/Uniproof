@@ -24,6 +24,7 @@ The platform combines:
 - Donor-funded Stellar aid pools
 - One-time claim enforcement through nullifiers
 - A browser-visible Stellar testnet contract scanner for users and reviewers
+- A Qwen-backed fraud review agent that scores claim risk before contract release
 
 ## Problem
 
@@ -114,6 +115,12 @@ flowchart LR
 - Browser-side Stellar RPC contract scanner
 - Frontend contract adapter for demo claim and funding rules
 
+**AI Agent**
+
+- Qwen through Alibaba Cloud Model Studio / DashScope
+- Server-side `/api/fraud-agent` proxy so API keys are never exposed in the browser
+- Local deterministic fallback for offline demos and missing development keys
+
 ## Run Locally
 
 ```bash
@@ -122,6 +129,21 @@ npm run dev
 ```
 
 Then open the local Vite URL shown in your terminal.
+
+The Qwen fraud agent works through a serverless API route in deployment. For Vercel, add this environment variable:
+
+```text
+QWEN_API_KEY=your_qwen_or_dashscope_key
+```
+
+Optional overrides:
+
+```text
+QWEN_MODEL=qwen-plus
+QWEN_BASE_URL=https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+```
+
+`DASHSCOPE_API_KEY` and `DASHSCOPE_BASE_URL` are also supported. If no key is configured, UniProof labels the review as a local fallback so the demo still runs.
 
 ## Test And Build
 
@@ -164,6 +186,7 @@ Current hackathon scope:
 - Guided judge onboarding tour
 - Success and rejection result popups
 - Stellar testnet contract ID visible in the browser
+- Qwen Fraud Review Agent step with risk level, recommendation, and reasons
 - Contract-connected demo logic for balances, nullifiers, and one-time claims
 
 Next steps after the hackathon:

@@ -25,3 +25,32 @@ export type ProofStatus = {
   canReleaseFunds: boolean;
   nullifier: string;
 };
+
+export type FraudRiskLevel = 'low' | 'medium' | 'high';
+
+export type FraudRecommendation = 'approve' | 'review' | 'block';
+
+export type FraudReviewProvider = 'qwen' | 'local-fallback';
+
+export type FraudReview = {
+  riskLevel: FraudRiskLevel;
+  recommendation: FraudRecommendation;
+  summary: string;
+  reasons: string[];
+  confidence: number;
+  provider: FraudReviewProvider;
+  model: string;
+  generatedAt: string;
+};
+
+export type FraudReviewContext = {
+  student: Pick<Student, 'id' | 'name' | 'university' | 'department' | 'verified' | 'needBand'> & {
+    credentialStatus: 'committed' | 'pending';
+  };
+  pool: AidPool;
+  proof: ProofStatus;
+  contract: {
+    poolBalanceXlm: number;
+    nullifierSeen: boolean;
+  };
+};

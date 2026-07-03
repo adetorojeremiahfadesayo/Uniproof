@@ -38,6 +38,12 @@ const tourSteps: TourStep[] = [
     hint: 'This pool matches high-need students and has enough XLM for the claim.'
   },
   {
+    targetId: 'fraud-agent',
+    title: 'Review the AI fraud signal',
+    body: 'The Qwen Fraud Review Agent scores claim risk before the contract action.',
+    hint: 'The agent is advisory: it explains suspicious signals while the Stellar contract remains the release gate.'
+  },
+  {
     targetId: 'release-funds',
     title: 'Run the contract decision',
     body: 'Click Release funds when the proof and contract checks are complete.',
