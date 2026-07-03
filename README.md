@@ -4,18 +4,19 @@
 
 ![UniProof dashboard showing the live Stellar testnet contract scanner and student verification workflow](./docs/images/uniproof-dashboard.png)
 
-**A university-first privacy passport for student identity, scholarship eligibility, emergency aid claims, and donor-funded support on Stellar.**
+**A university-first privacy passport for student identity, scholarship eligibility, emergency aid claims, donor-funded support, and AI-assisted fraud review on Stellar.**
 
 [![Stellar](https://img.shields.io/badge/Stellar-Testnet-6f42c1)](https://stellar.org)
 [![Soroban](https://img.shields.io/badge/Soroban-Smart%20Contract-0f766e)](https://soroban.stellar.org)
 [![React](https://img.shields.io/badge/React-TypeScript-2563eb)](https://react.dev)
 [![Vite](https://img.shields.io/badge/Vite-Build-f59e0b)](https://vite.dev)
+[![Qwen](https://img.shields.io/badge/Qwen-Fraud%20Agent-7c3aed)](https://www.alibabacloud.com/product/modelstudio)
 
 </div>
 
 ## Overview
 
-UniProof lets a university verify a student once, then lets that student prove scholarship or emergency-aid eligibility without repeatedly exposing passports, transcripts, income documents, or unrelated wallet history.
+UniProof lets a university verify a student once, then lets that student prove scholarship or emergency-aid eligibility without repeatedly exposing passports, transcripts, income documents, or unrelated wallet history. Before a claim reaches final contract action, a Qwen-powered fraud review agent checks the bounded claim context and explains risk signals to reviewers.
 
 The platform combines:
 
@@ -43,15 +44,39 @@ The MVP models the zero-knowledge boundary with a deterministic proof-status lay
 
 Users can see the public result - approved, rejected, or already claimed - without needing the student's full identity file.
 
+## Qwen Fraud Review Agent
+
+UniProof includes an AI fraud-review step between private proof review and the Stellar contract decision. The agent is advisory: it helps reviewers understand risk, while the contract model remains the source of truth for fund release.
+
+The agent reviews only bounded claim metadata:
+
+- Credential status
+- Pool eligibility rules
+- Private proof result
+- Nullifier status
+- Pool balance and award amount
+
+It returns:
+
+- Risk level: low, medium, or high
+- Recommendation: approve, review, or block
+- Short explanation for reviewers
+- Concrete risk reasons
+- Provider status: live Qwen or local fallback
+
+The Qwen API key is handled by a server-side `/api/fraud-agent` route and is never exposed in the browser bundle.
+
 ## Users Demo Walkthrough
 
 1. Open UniProof and confirm the **Live Testnet Contract** panel.
 2. Use the guided tour to follow the demo path.
 3. Select **Maya Chen** for the successful claim flow.
 4. Select **Emergency Aid Grant**.
-5. Review the private proof and contract decision.
-6. Click **Release funds** to see the approved claim popup.
-7. Click **Try another student**, select **Leo Martin**, and run the same pool to see a rejected claim with the reason.
+5. Review the private proof.
+6. Check the **Qwen Fraud Review Agent** risk signal and recommendation.
+7. Review the Stellar contract decision.
+8. Click **Release funds** to see the approved claim popup.
+9. Click **Try another student**, select **Leo Martin**, and run the same pool to see a rejected claim with the reason.
 
 ## Screenshots
 
@@ -91,8 +116,9 @@ flowchart LR
   student["Student"] --> proof["Private proof result"]
   donor["Donor"] --> pool["Stellar aid pool"]
   passport --> proof
+  proof --> agent["Qwen fraud review agent"]
+  agent --> contract
   pool --> contract["UniProofPool contract model"]
-  proof --> contract
   contract --> decision{"Contract decision"}
   decision -- Approved --> release["Release aid"]
   decision -- Rejected --> reason["Show rejection reason"]
