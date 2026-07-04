@@ -15,6 +15,8 @@
 </div>
 
 ## Overview
+## Demo link: https://uniproof.vercel.app/
+
 
 UniProof lets a university verify a student once, then lets that student prove scholarship or emergency-aid eligibility without repeatedly exposing passports, transcripts, income documents, or unrelated wallet history. Before a claim reaches final contract action, a Qwen-powered fraud review agent checks the bounded claim context and explains risk signals to reviewers.
 
